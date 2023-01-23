@@ -1,0 +1,258 @@
+\documentclass[runningheads]{llncs}
+%
+\usepackage[T1]{fontenc}
+%
+\usepackage{graphicx}
+%
+
+% Daniel Motz's packages
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{ bbold }
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage{pgfplots}
+\pgfplotsset{compat = newest}
+
+\usepackage{hyperref}
+
+\usepackage{setspace}
+\doublespacing
+
+\renewcommand{\abstractname}{}
+\newcommand{\inline}{\mintinline[fontsize=\normalsize]{c++}{text}}
+\DeclareUnicodeCharacter{03BB}{$\lambda$}
+% END Daniel Motz's packages
+
+\begin{document}
+%
+\title{
+    Einführung in die Künstliche Intelligenz
+}
+%
+\titlerunning{Einführung in die KI}%
+\author{Maximilian Stock, Daniel Motz}
+%
+\authorrunning{D. Motz}
+%
+\institute{Fakultät für Mathematik und Informatik, Friedrich-Schiller-University,\\ Jena, Germany\\
+\vspace{.2cm}
+\email{maximilian.stock@uni-jena.de, daniel.motz@uni-jena.de}
+}
+%
+\maketitle % typeset the header of the contribution
+%
+
+\section{Der Gegenstandsbereich}
+\subsection{Lernfragen}
+\begin{description}
+  \item[Was meint "KI"?] KI ist das Unterfangen, künstliche intelligente Systeme zu bauen. 
+  \item[Der Turing-Test]
+  \item["Starke" und "schwache" KI]
+  \item[Symbolische KI vs. Konnektionismus]
+\end{description}
+
+\subsection{TODOs}
+\begin{itemize}
+    \item (Seite 10 FS 1) teleologischer Aspekt WB-Systeme verstehen
+    \item (Seite 10 FS 1) "nach generellen Prinzipien strukturiert" verstehen
+    \item (Seite 10 FS 1) Wissenstransfer, Erklärung. Was bedeutet das?
+    \item (Seite 11 FS 1) Wissenstypen: Begriffe abgrenzen
+\end{itemize} 
+
+\subsection*{Done TODOs}
+\begin{itemize}
+    \item Den "nicht-einfachen" Turing-Test (die Verhörsituation) verstehen
+    \item Was ist eine einbettende Umgebung in einem PSS?
+    \item PSS genauer definieren
+    \item Starke und Schwache KI nach Searle verstehen
+\end{itemize}
+
+\subsection{Was ist KI?}
+
+\subsubsection{1. Definitionsversuch}
+
+KI ist das Unterfangen, künstliche intelligente Systeme zu \textit{bauen}.
+Mit Intelligenz sind Aufgaben, die Menschen gut bewältigen gemeint. Sie
+demonstrieren Intelligenz:
+
+\begin{itemize}
+    \item Bilderkennung
+    \item Stimmerkennung
+    \item Aufstellen vernünftigter Erwartungen (z.B. wenn etwas "John" heißt, erwarten wir, dass es sich nicht um ein Kino oder ein Eis, sondern wahrscheinlich um eine Person; vielleicht noch ein Haustier oder Ähnliches). 
+\end{itemize}
+
+Nicht alles, was der Mensch gut tut, ist interessant für die KI. 
+
+Viele Aufgaben, die gemeinhin als schwierig (Intelligenz voraussetzen) gelten, sind zu \textit{speziell}: Das einzig intelligente, was ein Schachprogramm kann,m ist Schachspielen!
+
+\subsubsection{Einfacher Turingtest}
+\begin{itemize}
+    \item Zwei Räume verbunden durch Fernschreiber
+    \begin{itemize}
+        \item in einem Raum der \textit{Tester}
+        \item im anderen: \textit{Mensch} oder \textit{Maschine}
+    \end{itemize}
+    \item Tester hat 30 Minuten Zeit über den Fernschreiber herauszufinden, ob es sich um einen Menschen oder eine Maschine handelt.
+\end{itemize}
+
+\subsubsection{2. Definitionsversuch}
+
+KI ist das Unterfangen, ein künstliches System zu bauen, das den Turingtest zuverlässig besteht.
+
+\subsubsection{Der Turing-Test}
+In einer "Verhörsituation" gibt es drei Personen, die sich gegenseitig nicht sehen und nur schriftlich kommunizieren können. Person A ist männlich, Person B ist weiblich und Person C hat ein beliebiges Geschlecht. Person C leitet das Verhör und soll bestimmen, welche der Personen welches Geschlecht hat. C kann beide mit X und Y ansprechen und muss am Ende A X und B Y oder B X und A Y zuordnen. A hat das Ziel, dass C die Geschlechter falsch bestimmt. Auch hier: Zeitlimit von 30 Minuten.
+
+Nun fragen wir uns: "Was passiert, wenn eine Maschine die Rolle von A übernimmt?" 
+
+\subsubsection{Einwände gegen den Turing-Test:}
+
+Kann die Maschine als Mensch durchgehen, nur weil der Tester schlecht ist? (... z.B. einschläft ...) Man wiederholt den Test mehrfach. Der Test ist sinnfrei, wenn $B$ lügen kann, z.B. vorgibt ein Mann zu sein, weil die "Intelligenz" der Maschine dann irrelevant für den Test ist. Er ist auch sinnfrei, wenn $A$ nicht lügen darf. Man geht explizit davon aus, dass $B$ keine Agenda hat.
+
+\subsubsection{Searle's Einwand}
+
+Der Tester tippt nicht mehr als 10 Zeichen pro Sekunde. Die Maschine muss maximal 18.000 Zeichen beantworten. Da die Anzahl an möglichen Anfragen begrenzt ist, kann man in einer riesigen Tabelle alle möglichen Konfrontationen für diesen Dialog speichern und die Maschine kann mit ihrer Hilfe alle intelligenten Reaktionen nachschlagen. Hier scheiden sich die Geister. Wann ist eine KI eine KI und was muss sie können?
+
+
+\begin{definition}{Die "starke" KI-Hypothese}
+
+\dots eine \textit{funktionale Definition von Intelligenz} $\Rightarrow$ Turing-Test bestehen.
+
+\end{definition}
+
+\begin{definition}{Die "starke" und die "schwache" KI-Hypothese}
+
+Eine schwache KI ist ein Werkzeug, das genau eine Klasse von Problemen lösen kann; zum Beispiel ein Schachcomputer. Für andere Probleme, etwa das steuern eines Fahrzeugs, ist er ungeeignet. Während eine schwache KI ihren Job nur anhand ihres Trainings erledigt, versteht eine starke KI ihre Aufgabe, und ist in der Lage eigenständig eine Lösungsstrategie zu entwickeln. Diese Fähigkeit zu argumentieren und zu abstrahieren, verleiht ihr außerdem die Fähigkeit, sich weiterzuentwickeln, sich zu verbessern und sich neue Fähigkeiten anzueignen. Sie ist autonom.
+
+\end{definition}
+
+\subsubsection{Was heißt hier "künstlich"?}
+
+Minimalforderung: künstlich $\Rightarrow$ anorganisch. Bringt uns aber nicht weiter...
+
+Besser: Ein künstliches System ist ein \textit{physical-symbol-system} (PSS) im Sinne von Newell und Simon. Ein PSS ist eine \textit{symbol-manipulierende Einrichtung} (enthält Symbole, die zusammen Symbolstrukturen bilden, welche erschaffen, bearbeitet, kopiert und gelöscht werden können. Beispiele: \textbf{Turingmaschine}, Universalrechner). Es muss in eine externe Umgebung eingebettet sein, damit man sein Verhalten evaluieren kann.
+
+Beispiel Schach: Unser Schachbrett ist die \textit{planning domain}. In dieser domain kann man sich nur über Züge von Figuren, die Positionen auf dem Brett und ob das Spiel gewonnen oder verloren ist unterhalten. Unsere KI repräsentiert ihre Erkenntnisse als Objekte in dieser domain.
+
+%https://en.wikipedia.org/wiki/Blocks_world
+
+\subsubsection{3. Definitionsversuch}
+
+KI ist das Unterfangen, ein PSS zu bauen, das den Turing-Test zuverlässig besteht.
+Zusatzanforderung mancher KI-ler: Die von dem PSS manipulierten Symbole sollen Objekten in der eingebetteten Umgebung entsprechen.
+
+\begin{definition}{Annahme des Deklarativismus.}
+
+    Nach der Annahme des Deklarativismus kann ein System, das alle "intelligenten Antworten" in einer Tabelle nachschlägt, nicht intelligent sein.
+\end{definition}
+
+\begin{remark}
+    Ein neuronales Netz ist keine deklarativistische Teildisziplin. Außer wenn man so viele Neuronen anlegst, dass alle Beispiele "gemerkt" werden können $\Rightarrow$ \textit{overfitting}.  
+\end{remark}
+
+
+\begin{remark}{Kann eine KI stark sein, wenn man auf einem Von-Neumann-Rechner ist?}
+    Wahrscheinlich nein, weil er deterministisch ist.
+\end{remark}
+
+\subsubsection{Modellierungsansatz}
+
+\begin{enumerate}
+    \item Algorithmische Theorie (Problemstellung definieren, Beweis der algorithmischen Lösbarkeit)
+
+    \item Repräsentation und Algorithmus (Algorithmus abstrakt entwerfen. Mithilfe eines Modells, z.B. Von-Neumann-Rechner, geeignete Datenstrukturen wählen)
+
+    \item Implementation (Umsetzung in einer Programmiersprache bzw. Maschinenanweisungen, Optimierung)
+\end{enumerate}
+
+Kompetenz: 1. und 2.
+
+Performanz: 2. und 3.
+
+\subsubsection{Wissensbasierte Systeme}
+
+Ein wissensbasiertes System kann als eine besondere Art von Programmiersystemen angesehen werden. Die Inferenzmaschine ist dabei ein Berechnungsmechanismus für mit der Wissensbasis gegebene Programme. Durch die Eingabe von Wissen wird die Inferenzmaschine programmiert. Das Wissen wird deklarativ repräsentiert. Es besteht sowohl aus Faktenwissen (ähnlich den Daten in einer herkömmlichen Datenbank) als auch Regelwissen, zum Beispiel in Form von Produktionsregeln (wenn ..., dann ...), die symbolisch vorliegen. 
+
+Quelle: \href{https://de.wikipedia.org/wiki/Wissensbasiertes_System}{Wikipedia: Wissensbasiertes System}
+
+\pagebreak
+
+\begin{itemize}
+    \item methodischer Aspekt -- automatische Lösung mit Fachwissen
+    \begin{itemize}
+        \item können mithilfe der Ableitungsregeln und dem Wissen in der WB schlussfolgern
+    \end{itemize}
+    \item qualitativer Aspekt -- schwieriges Problem
+    \begin{itemize}
+        \item WB-Systeme werden in Feldern angewendet, auf denen imperative, algorithmische Lösung schwer realisierbar sind
+    \end{itemize}
+    \item teleologischer Aspekt -- praktische Bedeutung
+    \begin{itemize}
+        \item 
+    \end{itemize}
+\end{itemize}
+
+Ein WB-System benötigt explizit und deklarativ dargestelltes fachgebietsspezifisches Wissen, das nach generellen Prinzipien strukturiert ist und einen generellen Schlussfolgerungsmechanismus.
+
+\subsubsection{Entwurf}
+\begin{itemize}
+    \item Wissensdarstellung ("Knowledge Representation")
+    \item Wissensausnutzung ("Problem Solving")
+    \item Wissenserwerb ("Knowledge Acquisition") $\rightarrow$ Erweiterung / Veränderung der WB
+    \item Wissenstransfer, Erklärung ("Explanation")
+\end{itemize}
+
+\subsubsection{Wissensrepräsentation}
+\paragraph{Wissenstypen}
+
+\begin{itemize}
+    \item elementare Tatsachen, Schlussweisen
+    \item spezielle Fälle, Situationen
+    \item bestimmte Vorgehensweisen, Algorithmen
+    \item allgemeine Gesetzmäßigkeiten, Alltagswissen
+\end{itemize}
+
+\subsubsection{Logik-basierte Repräsentationsformalismen}
+\begin{itemize}
+    \item Terminologische Logiken, Beispiel: Diagnosesystem für Fahrzeugdefekte. Symptome als Input, Diagnose als Output)
+    \item Vererbung (von Eigenschaften)
+    \item Nicht-Monotonie (Monotonie bedeutet, dass bei Erweiterung der Wissensbasis alle bisherigen Schlüsse weiterhin gültig sind. Verwendung von Defaults ist bspw. nicht-monoton.)
+\end{itemize}
+
+\subsubsection{Problemlösungstechniken in WB-Systemen}
+
+\begin{description}
+    \item[Klassifikation] ...
+    \item[Zugriff] ...
+    \item[Synthese] Schließen von neuem Wissen aus der bestehenden WB (und anschließendes Aufnehmen in die WB)
+    \item[Deduktion] Ableitung mithilfe von Ableitungsregel
+    \item[Simulation] ...
+    \item[Zielorientierte Suche] ...
+    \item[Planen als zielorientierte Suche auf Metaebene] 
+    \item[Strukturanalyse] ...
+    \item[Transformation] ...
+\end{description}
+
+\subsubsection{Einsatzbereiche für WB-Systeme}
+\begin{itemize}
+    \item Interpretation physikalischer Daten (Messungen interpretieren)
+    \item Diagnose von Systemzuständen (Fehler im Auto, kranker Patient)
+    \item Planung von Handlungen, um Ziele zu erreichen (Marjapussi)
+    \item Entwurf und Konstruktion nach Spezifikation 
+    \item Unterricht und Training von Kenntnissen und Fähigkeiten (Deep Learning?)
+\end{itemize}
+
+\subsection{Wichtige Teilgebiete der KI}
+
+\subsubsection{Klassische (symbolische) KI}
+\begin{itemize}
+    \item Wissensrepräsentation
+\end{itemize}
+
+\end{document}
