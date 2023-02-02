@@ -1,4 +1,4 @@
-\documentclass[runningheads]{llncs}
+\documentclass[runningheads,deutsch]{llncs}
 %
 \usepackage[T1]{fontenc}
 %
@@ -27,6 +27,7 @@
 
 \renewcommand{\abstractname}{}
 \newcommand{\inline}{\mintinline[fontsize=\normalsize]{c++}{text}}
+\newcommand{\estimates}{\overset{\scriptscriptstyle\wedge}{=}}
 \DeclareUnicodeCharacter{03BB}{$\lambda$}
 % END Daniel Motz's packages
 
@@ -39,7 +40,7 @@
 \titlerunning{Einführung in die KI}%
 \author{Maximilian Stock, Daniel Motz}
 %
-\authorrunning{D. Motz}
+\authorrunning{M. Stock, D. Motz}
 %
 \institute{Fakultät für Mathematik und Informatik, Friedrich-Schiller-University,\\ Jena, Germany\\
 \vspace{.2cm}
@@ -284,15 +285,25 @@ ist ein Teilgebiet der Kybernetik, welches sich mit dem Verhalten vernetzter Sys
 
 \section{Logik}
 
+
+\textbf{TODOs}
+\begin{itemize}
+    \item Interpretationsbereich klären (Seite 5 lprelim.div)
+\end{itemize}
+
 \subsection{Lernfragen}
 
 \begin{description}
-    \item[Logische Programmierung] 
-    \item[Prädikatenlogik]
-    \item[Klausellogik]
-    \item[Aussagenlogische Resolution]    
-    \item[Unifikation] 
-    \item[Prädikatenlogische Resolution] 
+    \item[Logische Programmierung] Besteht aus einer Menge von Axiomen, die als Fakten oder Annahmen zu verstehen sind, aus denen die Anfrage eines Benutzers beantwortet werden soll. 
+    \item[Aussagenlogik] Atome (denen ein Wahrheitswert zugeordnet wird) und Junktoren
+    \item[Prädikatenlogik] Erweitert um Prädikate (Aussagen mit Leerstellen, wie eine Funktion) und Quantoren ($\exists, \forall$). Bspw. $\forall x \in \text{Menschen}: \text{mutter}(\text{Eva}, x)$
+    \item[Klausellogik] Formel in KNF, bei der die Konjunktionen jeweils in Mengenschreibweise zusammengefasst werden. Bspw.: \\
+    $((a \lor b) \land (b \lor c) \land (a \lor \lnot d \lor \lnot e) \land d) \estimates \{\{a,b\}, \{b, c\}, \{a, d, e\}, \{d\}\}$
+    \item[Aussagenlogische Resolution] Statt eine allgemeine Gültigkeit zu beweisen, leitet es einen Widerspruch für die Negation her    
+    \item[Unifikation] Zwei Ausdrücke werden unifiziert, indem ihre Variablen so durch geeignete Terme ersetzt werden, dass die resultierenden Ausdrücke gleich sind.
+    \item[Prädikatenlogische Resolution] Zwei Klauseln $K$ und $K'$ werden resolviert, indem man man ein $\phi$ findet, das in $K$ enthalten ist und dessen Negation $\lnot\phi \in K'$. Man bildet dann die Vereinigung $(K \backslash \phi) \cup (K' \backslash \lnot\phi)$ und nennt sie Resolvente.
+    \item[Aussagenlogische Resolution] Exakt analog zu prädikatenlogischer Resolution. Man nimmt den Term und seine Negation aus den zu resolvierenden Klauseln und bilden ihre Vereinigung.
+    \item[Inferenz] aufbereitetes Wissen, das aufgrund von logischen Schlussfolgerungen gewonnen wurde
 \end{description}
 
 \subsection{Logische Programmierung}
@@ -306,13 +317,97 @@ Die Klausellogik als syntaktische Teilklasse von PL1 ist für das Theorembeweise
 
 Der auf Klausellogik basierende Resolutionskalkül kann aber auch als \textbf{Programmiersprache} verwendet werden.
 
-Logische Programmierung (z.B. in \textbf{PROLOG}) basiert auf \textbf{Klausellogik} und dem Standard-Inferenzmechanismus der \textbf{Resolution}.
+Logische Programmierung (z.B. in \textbf{Prolog}) basiert auf \textbf{Klausellogik} und dem Standard-Inferenzmechanismus der \textbf{Resolution}. Prolog ist daher ein \textit{Satisfiability Solver}. Statt Prolog ließe sich eine prädikatenlogische Axiomensammlung auch mit einem anderen SAT-Solver lösen -- der Vorteil besteht darin allerdings in der Einfachheit des Backtracking-Algorithmus. Er besitzt ein vom Programmierer reproduzierbares und planbares Verhalten. 
 
 \[
     \text{Annahmen} \xrightarrow[\text{als Inferenzregel}]{\text{Resolution}} \text{Konklusionen}
 \]
 
 % TODO Beispiel in PROLOG
+
+\subsection{Syntax der Prädikatenlogik}
+
+Induktiver Aufbau prädikatenlogische Ausdrücke mit:
+
+\begin{enumerate}
+    \item \textbf{Konstantensymbolen} $a, b, c, \dots$
+    \item \textbf{Funktionssymbolen} $f, g, h, \dots$
+    \item \textbf{Variablensymbolen} $x, y, z, \dots$
+    \item \textbf{Prädikatensymbolen} likes, father, $\dots$
+\end{enumerate}
+
+Man unterscheidet zwischen \textit{Termen, Atomformeln}.
+Ein \textbf{Term} ist entweder
+
+\begin{itemize}
+    \item ein Konstantensymbol,
+    \item ein Variablensymbolen
+    \item ein Funktionssymbol angewendet auf ein Tupel (geeordnete Anordnung) von Termen.
+\end{itemize}
+
+Eine \textbf{Atomformel} ist ein Prädikatsymbo, angewendet auf ein Tupel von Termen.
+
+Ein \textbf{Grundterm/Grundformel} ist ein Term/eine Formel, der/die keine Variablen enthält.
+
+\begin{example}
+    $a, x$ und $f(b, f(b, y, z), y)$ sind Terme.\\
+    $\text{likes}(x, \text{dad}(x))$ und \\
+    $\text{borrows}(\text{doug}, \text{book}, \text{chris})$ sind Atomformeln.
+\end{example}
+
+Eine \textbf{wohlgeformte Formel} ist entweder eine Atomformel oder hat eine der folgenden Formen $(W_1, W_2, W \text{ seien wohlgeformt}):$
+
+\begin{align}
+    (W) \\
+    W_1 \land W_2 \\
+    W_1 \rightarrow W_2 \\
+    \lnot W \\
+    W_1 \lor W_2 \\
+    (\exists X) W \\
+    (\forall X) W
+\end{align}
+
+Der \textbf{Gültigkeitsbereich} einer Quantifikation $\forall x$ (bzw. $\exists x$) in einer Formel $\forall x \text{F}$ (bzw. $\exists x \text{F}$) ist genau die Teilformel F. Die Variable $x$ heißt dann \textbf{gebunden} in $\forall x \text{F}$ (bzw. $\exists x \text{F}$).
+
+Eine Variable, die in keiner Teilformel einer Formel F gebunden auftritt, heißt \textbf{frei} in F.
+
+Eine \textbf{geschlossene Formel} ist eine wohlgeformte Formel, in der jedes Vorkommen eines jeden Variablensymbols gebunden ist.
+
+\begin{example}
+    $(\forall x)((\exists y) \text{child}(x) \rightarrow \text{father}(y, x)).$
+\end{example}
+
+Bindungsregeln der logischen Konnektoren und Quantoren:
+
+\setlength{\tabcolsep}{12pt}
+\begin{center}    
+    \begin{tabular}{l l l}
+        $\lnot$           & bindet stärker als & $\land$ und $\lor$ \\
+        $\land$ und $\lor$ & bindet stärker als & $\rightarrow$
+    \end{tabular}
+\end{center}
+
+\subsection{Prädikatenlogik -- die Semantik}
+
+Die Bedeutung einer logischen Sprache wird mithilfe einer \textbf{Interpretation $I$} festgelegt:
+
+\begin{enumerate}
+    \item Der \textbf{Interpretationsbereich} $D = dom(I)$ ist eine (nichtleere) Menge von Objekten, auf die sich $I$ bezieht.
+    \item Jedem Konstantensymbol wird genau ein Element aus $D$ zugeordnet.
+    \item Jedem $n$-stelligen Funktionssymbol wird genau eine Funktion von $D^n \mapsto D$ zugeordnet.
+    \item Jedem $n$-stelligen Prädikatsymbol wird genau eine $n$-stellige Relation aus $dom(I)^n$ zugeordnet.
+\end{enumerate}
+
+Eine Interpretation weist jeder Formel $G$ einen Wahrheitswert zu:
+
+\begin{itemize}
+    \item $I \vDash G$, wenn $I$ der Formel $G$ den Wert \textbf{wahr} zuordnet und
+    \item $I \nvDash G$, falls $I$ der Formel $G$ den Wert \textbf{falsch} zuordnet.
+\end{itemize}
+
+\subsection{Wahrheitswert zusammengesetzter Formeln}
+
+
 
 \end{document}
  
