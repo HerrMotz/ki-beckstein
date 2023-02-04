@@ -408,5 +408,22 @@ Eine Interpretation weist jeder Formel $G$ einen Wahrheitswert zu:
 
 \subsection{Wahrheitswert zusammengesetzter Formeln}
 
+Prinzip der \textbf{Kompositionalität}:
+
+Der Wahrheitswert einer Formel setzt sich aus den Wahrheitswerten ihrer Teilformeln zusammen.
+
+\begin{center}
+    \begin{tabular}{l l l l}
+        $\lnot W$ & wahr & $\Leftrightarrow$ & $W$ falsch \\
+        $W_1 \land W_2$ & wahr & $\Leftrightarrow$ & $W_1$ wahr und $W_2$ wahr \\
+        $W_1 \lor W_2$ & wahr & $\Leftrightarrow$ & $W_1$ wahr oder $W_2$ wahr \\
+        $W_1 \rightarrow W_2$ & falsch & $\Leftrightarrow$ & $W_1$ wahr und $W_2$ falsch
+    \end{tabular}
+\end{center}
+
+$(\forall x) W$ ist wahr gdw. für \textbf{jedes} Element $e$ aus $\mathcal{D}$, durch Ersetzen der Variablen $x$ durch $e$ eine wahre Formel entsteht, sonst falsch.
+
+$(\exists x) W$ ist wahr gdw. für \textbf{ein} Element aus $e$ aus $\mathcal{D}$, durch Ersetzen der Variablen $x$ durch $e$ eine wahre Formel entsteht, sonst falsch.
+
 \end{document}
  
