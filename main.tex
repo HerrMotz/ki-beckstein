@@ -27,6 +27,10 @@
 \usepackage{setspace}
 \doublespacing
 
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{C}{>{$}c<{$}} % math-mode version of "l" column type
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+
 \renewcommand{\abstractname}{}
 \newcommand{\inline}{\mintinline[fontsize=\normalsize]{c++}{text}}
 \newcommand{\estimates}{\overset{\scriptscriptstyle\wedge}{=}}
@@ -424,6 +428,153 @@ Der Wahrheitswert einer Formel setzt sich aus den Wahrheitswerten ihrer Teilform
 $(\forall x) W$ ist wahr gdw. für \textbf{jedes} Element $e$ aus $\mathcal{D}$, durch Ersetzen der Variablen $x$ durch $e$ eine wahre Formel entsteht, sonst falsch.
 
 $(\exists x) W$ ist wahr gdw. für \textbf{ein} Element aus $e$ aus $\mathcal{D}$, durch Ersetzen der Variablen $x$ durch $e$ eine wahre Formel entsteht, sonst falsch.
+
+\subsection{Begriffe aus der Modelltheorie}
+
+\subsubsection{Modelltheorie}
+Inhalt der Modelltheorie sind die Beziehungen zwischen den rein formalen Ausdrücken einer Sprache (syntaktische Ebene) und deren Bedeutung (semantische Ebene). Diese Beziehung wird über sogenannte Interpretationen und eine als Erfüllungsrelation bezeichnete mathematische Relation hergestellt.
+
+Gibt es für eine Formel $F$ eine Interpretation $\mathcal{I}$, die $F$ wahr macht, so heißt $F$ \textbf{erfüllbar} und $\mathcal I$ ein Modell für $F$. \\
+
+Ein Formel $F$ heißt \textbf{gültig}, falls sie in jeder Interpretation wahr ist. Schreibweise $\vDash F$. \\
+
+Ist eine Formel $F$ in keiner Interpretation wahr, so nennen wir sie \textbf{unerfüllbar}. \\
+
+Sei $\Gamma$ eine Menge geschlossener Formeln und $F$ eine beliebige geschlossene Formel. $F$ heißt \textbf{logische Konsequenz} von $\Gamma$,
+
+\[
+    \Gamma \vDash F,
+\]
+
+\parindent0mm
+falls für jede Interpretation $\mathcal I$ gilt:
+
+\[
+    \text{falls } \mathcal I \vDash \Gamma, \text{ dann } \mathcal I \vDash F.
+\]
+
+Es gilt damit:
+
+\[
+    \Gamma \cup \{\lnot F\} \text{ ist unerfüllbar gdw. } \Gamma \vDash F.
+\]
+
+\parindent5mm
+
+Dies impliziert, dass eine Menge an Formeln $\Gamma$ erfüllbar ist gdw. alle Formeln in $\Gamma$ erfüllbar sind.
+
+Daher kann man sich beim Beweis der \textbf{logischen Konsequenz} mit dem Nachweis der entsprechenden \textbf{Unerfüllbarkeit} behelfen.
+
+\begin{example}
+    Seien in einer Sprache $c_i$ Konstantensymbole, $f_i$ Funktionssymbole, $R_i$ Prädikatensymbole, $x_i$ Variablensymbole.
+    %
+    Gegeben seien weiter die Interpretationen $I_1$ und $I_2$:
+
+    \begin{tabular}{L L L L l}
+        I_1: & dom(I_1) & \mapsto & \mathcal N & Domäne der natürlichen Zahlen \\
+             & c_1      & \mapsto & 0          & Konstantensymbol \\
+             & f_1^1    & \mapsto & succ       & einstelliger Nachfolgerfunktion \\
+             & R_1^1    & \mapsto & =          & zweistelliges Gleichheitsprädikat \\
+             \\
+        I_2: & dom(I_1) & \mapsto & \mathcal Q & Domäne der positive rationalen Zahlen \\
+             & c_1      & \mapsto & 1          & Konstantensymbol \\
+             & f_1^1    & \mapsto & id         & einstellige Identitätsfunktion \\
+             & R_1^2    & \mapsto & \leq       & zweistelliges kleiner-oder-gleich-Prädikat
+    \end{tabular}
+    \\
+    Die Formel 
+    \[
+        P = (\forall X_1) R_1^2(f_1^1(f_1^1(x_1)), x_1)
+    \]
+    bedeutet im Falle der Interpretation
+
+    \begin{center}
+        \begin{tabular}{L l L}
+            I_1: & für jedes $x \in \mathcal N$ gilt: & succ(succ(x)) = x \\
+            I_2: & für jedes $x \in \mathcal Q$ gilt: & id(id(x)) \leq x
+        \end{tabular}
+    \end{center}
+    %
+    Die Aussage $P$ ist
+    \begin{enumerate}
+        \item für $I_1$ falsch ($I_1 \nvDash P)$,
+        \item für $I_2$ dagegen wahr ($I_2 \vDash P)$.
+    \end{enumerate}
+\end{example}
+
+\subsection{Begriffe aus der Beweistheorie}
+
+\subsubsection{Beweistheorie}
+ist ein Teilgebiet der mathematischen Logik, das Beweise als formale mathematische Objekte behandelt, was deren Analyse mit mathematischen Techniken ermöglicht. Beweise werden üblicherweise als induktiv definierte Datenstrukturen dargestellt, wie Listen oder Bäume. Diese werden gemäß den Axiomen und Schlussregeln des betrachteten logischen Systems konstruiert. Die Beweistheorie ist von syntaktischer Natur im Gegensatz zur Modelltheorie, die von semantischer Natur ist. 
+
+\textbf{Beweisen} ist syntaktisches Folgern
+\begin{itemize}
+    \item in einer Sprache $L$
+    \item mit vorgegebenen \textbf{Schlussregeln} $R$:
+\end{itemize}
+
+\[ \vdash_{L,R}\; := \{(S, s) \, |\, S \subset L, s \in L, S \vdash_{L,R} s\} \]
+%
+Im logisches Kontext bezeichnet man
+\begin{itemize}
+    \item die Ausgangssätze als \textbf{Axiome},
+    \item die abgeleiteten Sätze als \textbf{Theoreme},
+    \item die Ableitungsregeln $R$ als \textbf{Inferenzregeln}.
+\end{itemize}
+%
+\textbf{Ableitungen} sind endliche Folgen
+\[ \langle s_1, \dots, s_n\rangle \]
+mit
+\[ \{s_i \, |\, i < j\} \vdash s_j \]
+(für $j \leq n$).
+Für jedes Axiom $A$ gilt dann $\emptyset \vdash A$.
+
+In der Logikprogrammierung sind die Axiome üblicherweise \textbf{nicht-logische Hypothesen:}
+\begin{itemize}
+    \item Die Hypothesen drücken Annahmen über den Problembereich aus.
+    \item Aus den Hypothesen ableitbare Sätze sind \textbf{nicht-logische Theoreme}.
+\end{itemize}
+%
+Probleme, die mit Logikprogrammiersystemen gelöst werden, sind von der Gestalt:
+\begin{itemize}
+    \item Gegeben sei eine Menge $S$ von Annahmen.
+    \item Gesucht sind Sätze $s$, die syntaktische Konsequenzen dieser Annahmen beschreiben: $S \vdash s$.
+\end{itemize}
+%
+Dabei soll gelten: Falls $S$ die Annahmen \textbf{korrekt} beschreibt, dann drückt $s$ eine Konsequenz ebenfalls korrekt aus.
+
+\parindent0mm
+Was hier \textbf{Korrektheit} bedeutet, legt die intendierte \textbf{Interpretation  $\mathcal I$} des Logikprogrammierers fest.
+
+\parindent5mm
+
+Für $I$ soll gelten:
+
+\[ \text{Falls } I \vDash S \text{ und } S \vdash s, \text{ dann } I \vDash s \]
+
+\subsubsection{Korrektheit der Inferenzregeln}
+\[ \Gamma \vdash F \Rightarrow \Gamma \vDash F \]
+
+\parindent 0mm
+Korrekte Inferenzregeln sind etwa
+\begin{description}
+    \item[modus ponens:] $B, B \rightarrow A \vdash A$
+    \item[modus tollens:] $\lnot A, B \rightarrow A \vdash \lnot B$ 
+\end{description}
+
+\subsubsection{Vollständigkeit der Inferenzregeln}
+\[ \Gamma \vDash F \Rightarrow \Gamma \vdash F \]
+
+\parindent0mm
+Für korrekte und vollständige Inferenzsysteme fallen syntaktischer und semantischer Ableitungsbegriff zusammen:
+
+\[ \Gamma \vdash F \Leftrightarrow \Gamma \vDash F \]
+
+Der in \textsc{Prolog} verwendete \textbf{Resolutionskalkül}
+\begin{itemize}
+    \item basiert auf nur einer (korrekten) Inferenzregel und
+    \item ist nur auf Formeln einer speziellen syntaktischen Form, der \textbf{Klauselform}, anwendbar.
+\end{itemize}
 
 \end{document}
  
