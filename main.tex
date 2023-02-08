@@ -527,13 +527,15 @@ Im logisches Kontext bezeichnet man
 mit
 \[ \{s_i \, |\, i < j\} \vdash s_j \]
 (für $j \leq n$).
-Für jedes Axiom $A$ gilt dann $\emptyset \vdash A$.
+Für jedes Axiom $A$ gilt dann $\emptyset \vdash A$. $S$ stellt unsere bisherige Wissensbasis dar.
 
+\parindent0mm
 In der Logikprogrammierung sind die Axiome üblicherweise \textbf{nicht-logische Hypothesen:}
 \begin{itemize}
     \item Die Hypothesen drücken Annahmen über den Problembereich aus.
     \item Aus den Hypothesen ableitbare Sätze sind \textbf{nicht-logische Theoreme}.
 \end{itemize}
+\parindent5mm
 %
 Probleme, die mit Logikprogrammiersystemen gelöst werden, sind von der Gestalt:
 \begin{itemize}
@@ -575,6 +577,10 @@ Der in \textsc{Prolog} verwendete \textbf{Resolutionskalkül}
     \item basiert auf nur einer (korrekten) Inferenzregel und
     \item ist nur auf Formeln einer speziellen syntaktischen Form, der \textbf{Klauselform}, anwendbar.
 \end{itemize}
+
+\subsection{Klausellogik}
+
+Ein \textbf{Literal} ist entweder eine atomare Formel (positives Literal) oder eine negierte atomare Formel (negatives Literal).
 
 \end{document}
  
