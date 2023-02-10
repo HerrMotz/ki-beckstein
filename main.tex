@@ -580,7 +580,116 @@ Der in \textsc{Prolog} verwendete \textbf{Resolutionskalkül}
 
 \subsection{Klausellogik}
 
-Ein \textbf{Literal} ist entweder eine atomare Formel (positives Literal) oder eine negierte atomare Formel (negatives Literal).
+Ein \textbf{Literal} ist entweder eine atomare Formel (positives Literal) oder eine negierte atomare Formel (negatives Literal). (Atomare Formel bzw. Atomformeln sind Prädikatensymbolen, angewendet auf ein Tupel von Termen.)
+
+\begin{example}
+    \[ \text{likes}(chris, mummy), \quad \lnot\text{likes}(chris, suffering) \]
+\end{example}
+
+Eine \textbf{Klausel} ist eine Formel der Form $\langle\text{Präfix}\rangle\langle\text{Matrix}\rangle$
+
+\parindent0mm
+
+\begin{tabular}{l l}
+    \textbf{Präfix}: & Sequenz von All-Quantifizierungen. \\
+    \textbf{Matrix}: & Quantorenfreie Konjunktionen von Formeln, \\
+                     &  die wiederum nur aus Disjunktionen von Literalen \\
+                     & zusammengesetzt sein dürfen.    
+\end{tabular}
+
+\begin{example}
+    \begin{align*}
+        (\forall x\forall y)( &(\text{likes}(chris, x) \lor \lnot \text{likes(x, logic)})\; \land \\
+        & \text{likes}(chris, logic)\; \land \\
+        & \text{likes}(bob, logic)\; \land \\
+        & (\text{likes}(x,y) \lor \lnot \text{loves}(x, y)))
+    \end{align*} ist eine 
+    Dies ist eine Menge sogenannter definitver Klauseln.
+    Lässt man hier die Quantoren weg (implizite All-Quantifizierung), ersetzt $\lor\lnot$ durch \texttt{:-} und schreibt alle Variablen groß, so erhält man ein \textsc{Prolog}-Programm.
+\end{example}
+
+Eine \textbf{definite Klausel} enthält genau ein positives Literal und beliebig viele negative Literale.
+
+
+\section{Prüfungsfragen}
+\begin{enumerate}
+    \item Was ist KI?
+    \item Was ist Suche?
+    \begin{enumerate}
+        \item Suchproblem modellieren
+        \item KEIN Min-Max wird abgefragt!
+        \item Beispiel $\rightarrow$ Navigationssystem (Lösung: nicht der kürzeste Weg, sondern ein Pfad.)
+        \begin{itemize}
+            \item Knoten: Orte in Stadt
+            \item Kanten: Aktionen von Ort zu Ort
+            \item $\rightarrow$ generiert von Startknoten aus.
+            \item Suchverfahren: Breitensuche, Tiefensuche, Heuristik
+            \item Breitensuche:
+            \begin{enumerate}
+                \item Kosten: Zeit / Entfernung $\infty > Kosten > 0$
+                \item Handlungsmöglichkeiten $< \infty$
+            \end{enumerate}
+            Heuristik:
+            \begin{itemize}
+                \item effizienter: $\rightarrow$ Zeit und Speicheraufwand
+                \item Bspw.: Luftlinie als Heuristik
+                \item Eine Heuristik ist zulässig, wenn
+                \begin{itemize}
+                    \item[$\rightarrow$] optimale Lösung $\rightarrow$ 
+                    \item[$\rightarrow$] monotoniebeschränkung $\rightarrow$ Warum führt die monotoniebeschränkung dazu, dass man nicht zweimal den gleichen Weg findet? 
+                \end{itemize}
+            \end{itemize}
+            \item A-Algorithmus
+            \begin{itemize}
+                \item[$\rightarrow$] open-list zu exp. Knoten $f(n) = h(n) + g(n)$ 
+                \item[$\rightarrow$] closed-list (braucht man eigentlich nicht, da die Heuristik monotoniebeschränkt ist)
+            \end{itemize}
+        \end{itemize}
+    \end{enumerate}
+    \item Logik
+    \begin{itemize}
+        \item Resolution ($\rightarrow$ siehe oben)
+        \item Logische Konsequenz
+        \item Kalkül
+        \begin{itemize}
+            \item Sprache (Symbole und syntaktische Regeln) $\Gamma_\alpha= \{P \; |\; \delta_\alpha \vdash_\alpha P\}$
+            \item Ableitungsregeln
+            \item Axiome
+        \end{itemize}
+        \item Wissen
+        \begin{itemize}
+            \item Trinität: Glaube, Rechtfertigung, Wahrheit (Wahrheitswerttabelle aufstellen und ausführlich erklären)
+            \item Gettier-Beispiele, Buridan-Sätze (kann man nicht mit dieser Trinität aufstellen, weil es einen Selbstbezug gibt)
+        \end{itemize}
+    \end{itemize}
+    \item Mögliche Welten und Agenten
+    \begin{itemize}
+        \item semantic attachment: Wenn wir neue Aussage aus unserer Welt bkeommen, die noch nicht in unseren Beliefs sind, dannn können wir die nutzen um neue Aussagen in usner Beliefsystem aufzunehmen.
+        \begin{align*}
+            B_\alpha(\Phi_1) \lor \Psi_1 \\
+            \vdots \\
+            B_\alpha(\Phi_n) \lor \Psi_n \\
+            \lnot B_\alpha(\Psi_{n+1}) \lor \Psi_{n+1} \\
+            \phi_1 \land \phi_2 \land \dots \land \psi_n \vdash \phi_{n+1} \\
+            \hline
+            \psi_1 \lor \psi_2 \lor \dots \lor \psi_{n+1}
+        \end{align*}
+        \begin{align*}
+            B_\alpha(\phi_1) \lor \text{ kein Vogel} \\
+            \lnot B_\alpha(\phi_2) \lor \text{ kein Säugetier} \\
+            \text{kann fliegen } \vdash \text{ hat Flügel}
+        \end{align*}
+    \end{itemize}
+    \item Nicht-Monotonie (wird er nicht so tief fragen, er geht eher auf Objektzentrierte Wissensrepräsentation ein)
+    \begin{itemize}
+        \item Wenn wir einmal etwas festlgelegt haben, können wir keine Widersprüche glauben. 
+        \item $\rightarrow$ Poole-Erweiterung (sind Defaults) $\hookrightarrow$ Wir behalten die Maximale Menge an Normalitäten und ersetzen nur mit einer minimalen Menge an Abnormalitäten. Wir versuchen möglichst viel von unserem Wissen zu behalten und möglichst wenig wegzuwerfen.
+    \end{itemize}
+    \item Objektzentrierte Wissensrepräsentation
+    \item Ontologie (legt er fokus), A-Box, T-Box erklären können, Warum ist die T-Box gerade die Ontologie?
+    \item Die Objekte sind Anreicherung des Wissensgraphen mit konkreten Beispielen
+    \item Probleme aus der Objektzentrierten Wissensrepräsentation werden durch probabilistisches Schließen gelöst. Also sollte man erklären können, wie die Probleme gelöst werden.
+\end{enumerate}
 
 \end{document}
  
