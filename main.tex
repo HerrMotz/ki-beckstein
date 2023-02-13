@@ -56,6 +56,8 @@
 \maketitle % typeset the header of the contribution
 %
 
+% Set paragraph indent to 0mm
+\parindent0mm
 \section{Der Gegenstandsbereich}
 \subsection{Lernfragen}
 \begin{description}
@@ -448,7 +450,6 @@ Sei $\Gamma$ eine Menge geschlossener Formeln und $F$ eine beliebige geschlossen
     \Gamma \vDash F,
 \]
 
-\parindent0mm
 falls für jede Interpretation $\mathcal I$ gilt:
 
 \[
@@ -460,8 +461,6 @@ Es gilt damit:
 \[
     \Gamma \cup \{\lnot F\} \text{ ist unerfüllbar gdw. } \Gamma \vDash F.
 \]
-
-\parindent5mm
 
 Dies impliziert, dass eine Menge an Formeln $\Gamma$ erfüllbar ist gdw. alle Formeln in $\Gamma$ erfüllbar sind.
 
@@ -531,13 +530,11 @@ mit
 (für $j \leq n$).
 Für jedes Axiom $A$ gilt dann $\emptyset \vdash A$. $S$ stellt unsere bisherige Wissensbasis dar.
 
-\parindent0mm
 In der Logikprogrammierung sind die Axiome üblicherweise \textbf{nicht-logische Hypothesen:}
 \begin{itemize}
     \item Die Hypothesen drücken Annahmen über den Problembereich aus.
     \item Aus den Hypothesen ableitbare Sätze sind \textbf{nicht-logische Theoreme}.
 \end{itemize}
-\parindent5mm
 %
 Probleme, die mit Logikprogrammiersystemen gelöst werden, sind von der Gestalt:
 \begin{itemize}
@@ -547,10 +544,8 @@ Probleme, die mit Logikprogrammiersystemen gelöst werden, sind von der Gestalt:
 %
 Dabei soll gelten: Falls $S$ die Annahmen \textbf{korrekt} beschreibt, dann drückt $s$ eine Konsequenz ebenfalls korrekt aus.
 
-\parindent0mm
 Was hier \textbf{Korrektheit} bedeutet, legt die intendierte \textbf{Interpretation  $\mathcal I$} des Logikprogrammierers fest.
 
-\parindent5mm
 
 Für $I$ soll gelten:
 
@@ -569,7 +564,6 @@ Korrekte Inferenzregeln sind etwa
 \subsubsection{Vollständigkeit der Inferenzregeln}
 \[ \Gamma \vDash F \Rightarrow \Gamma \vdash F \]
 
-\parindent0mm
 Für korrekte und vollständige Inferenzsysteme fallen syntaktischer und semantischer Ableitungsbegriff zusammen:
 
 \[ \Gamma \vdash F \Leftrightarrow \Gamma \vDash F \]
@@ -590,7 +584,6 @@ Ein \textbf{Literal} ist entweder eine atomare Formel (positives Literal) oder e
 
 Eine \textbf{Klausel} ist eine Formel der Form $\langle\text{Präfix}\rangle\langle\text{Matrix}\rangle$
 
-\parindent0mm
 
 \begin{tabular}{l l}
     \textbf{Präfix}: & Sequenz von All-Quantifizierungen. \\
