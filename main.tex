@@ -35,6 +35,13 @@
 \newcommand{\inline}{\mintinline[fontsize=\normalsize]{c++}{text}}
 \newcommand{\estimates}{\overset{\scriptscriptstyle\wedge}{=}}
 \DeclareUnicodeCharacter{03BB}{$\lambda$}
+
+\newenvironment{indentleft}[1]{
+    \setlength{\leftskip}{#1}
+}{
+    \setlength{\leftskip}{0pt}
+}
+\usepackage{cancel}
 % END Daniel Motz's packages
 
 \begin{document}
@@ -605,6 +612,263 @@ Eine \textbf{Klausel} ist eine Formel der Form $\langle\text{Präfix}\rangle\lan
 
 Eine \textbf{definite Klausel} enthält genau ein positives Literal und beliebig viele negative Literale.
 
+\section{Suche}
+
+\subsection{Prüfungsfragen}
+\begin{description}
+    \item[Zustandsraum] Baum mit Knoten, die Zustände der Suche beschreiben. 
+    \item[Suche in Zustandsräumen] 
+    \item[Zustandsraumrepräsentationen] 
+    \item[Blinde Suche] 
+    \item[Heuristische Suche]
+    \item[Vorwärts- und Rückwärtssuche]  
+\end{description}
+
+\subsection{Zustandsraum}
+\begin{itemize}
+    \item Baum mit Knoten, die Zustände
+    \item Wurzel ist Startzustand. 
+    \item Es gibt mindestens einen Zielzustand.
+\end{itemize}
+
+\subsection{Suche in Zustandsräumen}
+\textbf{Die Suchprozedur}
+
+\textbf{Eingabe:}
+\begin{enumerate}
+    \item Startknoten (Plural)
+    \item Zielknoten (Plural)
+    \item Funktion, die Nachfolger zu einem Knoten generieren kann (das Erweitern um einen Knoten nennt man expandieren)
+    \item eventuell Qualitätskriterien
+\end{enumerate}
+
+\textbf{Ausgabe:} Den Pfad vom Startzustand zu einem Zielzustand. \\
+
+Der Suchraum besteht zu Beginn des Suchverfahrens nicht. Der Suchraum wächst mit jeder Ebene im Baum exponentiell. Deshalb generiert man den Suchbaum soweit nötig während der Suche. Einerseits ist dies durch den Speicherbedarf und andererseits durch die Berechnung einer Modifikation limitiert. Innere Knoten entsprechen partiellen Lösungen. Blätter im voll expandierten Suchraum sind nicht-expandierbare Knoten.
+
+\textbf{Generische Prozedur zum Lösen von Suchprobleme:}
+\begin{enumerate}
+    \item Sei $L$ die Liste der Startknoten (unser Suchproblem kann daher ein Wald sein) für das Problem (ab jetzt wird $L$ immer die Liste der noch nicht überprüften Knoten darstellen). 
+    \item Ist $L$ leer, so melde einen Fehlschlag. \\
+          Andernfalls wähle einen Knoten $n$ aus $L$.
+    \item Stellt $n$ einen Zielknoten dar, so melde Erfolg und liefere den Pfad vom Startknoten zu $n$.
+    \item Andernfalls ersetze in $L$ den Knoten $n$ durch seine Nachfolgeknoten\\
+          Markiere dabei die neuen Knoten mit dem jeweils zugehörigen Pfad vom Startknoten. (Markieren kann mit einer sogenannten Closed-List /-Set umgesetzt werden. Knoten werden markiert, indem man sie dort einfügt.)
+    \item Weiter mit Schritt $2! = 2$.
+\end{enumerate}
+
+Das bedeutet: Knoten werden erst beim Expandieren auf Zieleigenschaft überprüft.
+
+Die Art der Wahl in Schritt $2!$ bestimmt die Suchstrategie:
+\begin{itemize}
+    \item \textit{blind:} Wahl allein aufgrund von \textit{Position im Baum} $\rightarrow$ bspw. Tiefen- und Breitensuche.
+    \item \textit{heuristisch:} Wahl unter \textit{Berücksichtigung der Domäne} $\rightarrow$ bswp. Suchverfahren mit einer Auswahlfunktion die Inhalte der Knoten einfließen lässt.
+\end{itemize}
+
+\subsection{Tiefensuche}
+
+\begin{enumerate}
+    \item Sei $L$ die Liste der Startknoten für das Problem.
+    \item Ist $L$ leer, so melde einen Fehlschlag. \\
+          Andernfalls wähle den \textit{ersten} Knoten $n$ aus $L$.
+    \item Stellt $n$ einen Zielknoten dar, so melde Erfolg und liefere den Pfad vom Startknoten zu $n$.
+    \item Andernfalls entferne $n$ aus $L$ und füge seine Nachfolgeknoten \textit{am Anfang} von $L$ an. \\
+          Markiere dabei wieder die neuen Knoten mit dem jeweils zugehörigen Pfad vom Startknoten.
+    \item Weiter mit Schritt $2!$.
+\end{enumerate}
+
+\subsection{Breitensuche}
+$\dots$ genau der gleiche Algorithmus wie oben, nur dass man im Schritt 4 die Nachfolgeknoten \textit{am Ende} von $L$ anfügt.
+
+\subsection{Tiefen- vs. Breitensuche, informell}
+
+Suche, die \textit{schnell bei Endzuständen} ankommt ist \textit{speicherökonomisch}:
+\begin{indentleft}{1cm}
+    Allein die Endzustände sorgen für Verkleinerung der Liste $L$ (der momentan gespeicherten Knotenmenge). Denn Eltern, die ausschließlich Endzustände als Kinder besitzen, können verworfen werden.
+\end{indentleft}
+
+Daher ist typischerweise Tiefensuche weniger speicherintensiv. Jedoch bestimmt die Form des Suchraums, welche Strategie besser ist.
+
+Breitensuche ist besser, falls:
+\begin{enumerate}
+    \item niedriger Verzweigungsgrad
+    \item Lösung auf geringer Tiefe
+\end{enumerate}
+
+Tiefensuche terminiert nicht, falls es unendlich lange Wurzelpfade gibt (wir beliebig tief expandieren können bzw. der Suchraum unendlich groß ist).
+
+\subsection{Heuristische Suche}
+
+Da wir bei Suchproblemen in der Praxis niemals den vollständigen Suchraum aufstellen, geschweige denn speichern können, benötigen wir eine Funktion, die die Entfernung zum Zielknoten schätzt.
+\\
+\\
+Die heuristische Funktion bestimmt einen möglichst guten als nächsten zu expandierenden Knoten. (Sie nimmt als Eingabe einen Knoten und liefert als Ausgabe einen geschätzten Abstand zum Ziel.)
+\\
+\\
+Beste Heuristik = teuerste Heuristik! (man könnte den gesamten Suchraum zur Bestimmung des optimalen nächsten Knotens bestimmen)
+\\
+\\
+Wir nennen das Berechnen der Heuristikfunktion für alle Knoten im Saum \textit{Meta-level Aktivität} und das Ausführen einer Modifikation \textit{Base-level Aktivität}.
+\\
+\\
+Aufwand auf dem Meta-level muss sich auf dem Base-level bezahlt machen! (Bei blinder Suche ist unser ML-Aufwand $ = 0$.)
+
+\subsection{Vorwärts- und Rückwärtssuche}
+
+Man kann die Suche auch umkehren, sofern die Modifikation umkehrbar und eine Lösung explizit (nicht nur implizit bspw. Kreuzworträtsel) bekannt ist. Wenn der Eingangsgrad größer ist als der Ausgangsgrad, so ist Rückwärtssuche einfacher ($\rightarrow$ man kehrt das Suchproblem um). Dadurch ist die Anzahl der Nachfolger geringer, damit auch die Anzahl an notwendigen Expansionen und auch der Rechenaufwand.
+
+% TODO Prüfen, was damit gemeint ist
+Unser Framework ermöglich bis jetzt nur Vorwärtssuche (wir können \textit{nur Nachfolger} generieren).
+
+Abhilfe:
+\\
+\begin{indentleft}{1cm}
+    Statt eines \textit{Suchbaums} verwenden wir einen \textit{Suchgraphen} zur Beschreibung des Suchraums.
+\end{indentleft}
+
+Mischformen sind ebenfalls möglich: man teilt das Suchproblem in Teilprobleme auf und kann in diesen wahlweise vorwärts oder rückwärts suchen.
+
+\begin{example}
+    \begin{itemize}
+        \item Kannibalen und Missionare (zwei Uferseiten und ein Boot. Auf keiner der Seiten dürfen mehr Kannibale sein als Missionare $\rightarrow$ Constraints)
+    \item Türme von Hanoi (Constraints: man darf immer nur eine Scheibe bewegen. Eine größere darf nicht auf einer kleineren Liegen.)
+    \item n-Damen-Problem (Damen dürfen sich auf einem $n\times n$-Schachfeld nicht gegenseitig schlagen können)
+    \item 8-Puzzle
+    \end{itemize}
+\end{example}
+
+$\hookrightarrow$ Constraints verkleinern den Suchraum erheblich!
+
+\subsection{Crux der blinden Suche}
+
+Blinde Suchverfahren sind praktisch nicht einsetzbar. Sie benötigen:
+
+\[ Time(X) = \mathcal O(b^d) \]
+
+Sie müssen im Worst-Case den gesamten Suchraum durchlaufen. Dieser wächst exponentiell.
+
+Daher benötigen wir Verfahren, mit denen wir spezifisch für das gegebene Problem die nächsten zu expandierenden Knoten bewerten können. Die optimale Wahl \textit{sicherzustellen} ist genau so teuer wie \textit{blinde Suche}. Wir suchen daher eine Daumenregel (eine sogenannte Heuristik) zur \textit{Abschätzung} $h$ des echten Abstands $h^*$ zum Ziel.
+
+\begin{example}
+    8-Puzzle (mit Zahlen). Als Heuristik wählt man die Anzahl an fehlplatzierten Steinen oder die Manhattan-Distanz.
+\end{example}
+
+\subsection{Hill Climbing mit Rücksetzen (BTHC)}
+
+\begin{enumerate}
+    \item Sei $L$ die Liste der Startknoten für das Problem, \textit{sortiert} nach der jeweils geschätzten Distanz $h$ zum ziel.
+    \item Ist $L$ leer, so melde einen Fehlschlag. \\ Andernfalls wähle den \textit{ersten} Knoten $n$ aus $L$.
+    \item Stellt $n$ einen Zielknoten dar, so melde Erfolg und liefere den Pfad vom Startknoten zu $n$.
+    \item Andernfalls entferne $n$ aus $L$ und füge seine Nachfolgeknoten, sortiert nach der jeweils geschätzten Distanz $h$ zum Ziel, \textit{am Anfang} von $L$ an. \\ Markiere dabei die neuen Knoten mit dem jeweils zugehörigen Pfad vom Startknoten.
+    \item Weiter mit Schritt $2$!
+\end{enumerate}
+
+Das ist effektiv Tiefensuche mit einer Heuristik (auch der Speicher- und Zeitbedarf ist vergleichbar). Wir wählen immer das am Besten bewertete Kind und expandieren es. (Eigentlich sortieren wir die Kinder des zuletzt expandierten Knoten nach der Schätzfunktion und fügen sie am Anfang der Openlist $L$ ein.)
+
+\subsection{Striktes Hill Climbing}
+
+\begin{enumerate}
+    \item Sei $L$ die Liste der Startknoten für das Problem, \textit{sortiert} nach der jeweils geschätzten Distanz $h$ zum Ziel.
+    \item Ist $L$ leer, so melde einen Fehlschlag. \\ Andernfalls wähle den \textit{ersten} Knoten $n$ aus $L$.
+    \item Stellt $n$ einen Zielknoten dar, so melde Erfolg und liefere den Pfad vom Startknoten zu $n$.
+    \item Andernfalls entferne $n$ aus $L$ und füge (nur) den besten Nachfolgeknoten von $n$ (den mit minimaler geschätzter Distanz $h$ zum Ziel) \textit{am Anfang} von $L$ an. \\ Markiere dabei den neuen Knoten mit dem zugehörigen Pfad vom Startknoten.
+    \item Weiter mit Schritt $2$!
+\end{enumerate}
+
+SHC hat \textit{konstanten Speicherbedarf} falls der Ausgangsverzweigungsgrad des Suchbaums beschränkt ist:
+
+\[ \text{Space}(SHC) = \mathcal O(d) \textcolor{gray}{\text{ im Skript steht } \mathcal O(b)} \]
+
+\subsection{Best-First-Suche (BS)}
+\begin{enumerate}
+    \item Sei $L$ die Liste der Startknoten für das Problem.
+    \item Ist $L$ leer, so melde einen Fehlschlag. \\ Andernfalls wähle denjenigen Knoten $n$ aus $L$, der dem Ziel \textit{schätzungsgemäß am nächsten} ist.
+    \item Stellt $n$ einen Zielknoten dar, so melde Erfolg und liefere den Pfad vom Startknoten zu $n$.
+    \item Andernfalls entferne $n$ aus $L$ und füge alle seine Nachfolgeknoten in die Liste $L$ ein. \\ Markiere dabei wieder die neuen Knoten mit dem jeweils zugehörigen Pfad vom Startknoten.
+    \item Weiter mit Schritt $2$!
+\end{enumerate}
+
+Dieses Verfahren betrachtet den gesamten Saum. Wir nehmen aus allen Knoten in der Openlist den vielversprechendsten. BS ist \textit{wesentlich speicherintensiver} als HC, denn die Openlist kann sehr groß werden.
+
+\subsection{Suche als Funktionsmaximierung}
+
+Man kann Suche auch als Funktionsmaximierung sehen.
+
+\begin{center}
+    \begin{tabular}{l l}
+        Gegeben: & eine Funktion $f$, die für einen Zustand $p$ dessen \textit{Interessantheit} $f(p)$ misst, \\
+        gesucht: & das Maximum $\text{max}_p\, f(p)$
+    \end{tabular}
+\end{center}
+
+\subsection{Probleme mit striktem (optimistischem) Hill Climbing}
+
+Bei einem lokalen Maximum, das nicht unserem globalen Maximum (Zielzustand) entspricht gerät das strikte HC in eine Sackgasse ($\rightarrow$ der Algorithmus terminiert mit einem Fehlschlag, da kein BT möglich ist). Das Verlassen des lokalen Maximums setzt voraus, dass wir entgegen der Empfehlung der Heuristik das lokale Maximum verlassen.
+
+Es wäre daher notwendig, den "Horizont zu erweitern". Dies kann einerseits durch einen randomisierten Anteil in der Heuristik oder das vorübergehende einsetzen von Breitensuche realisiert werden. (Hilft auch bei Plateaus. Denn HC würde ohne Heuristik in \text{genau eine} Richtung gehen und alles andere verwerfen. Er läuft damit Gefahr niemals zum Ziel zu kommen.)
+
+Rubik's Cubes sind ein gutes Beispiel für den Einsatz von Makrooperatoren. Es ist sinnvoll mehrere Züge (Drehungen) zu einem Operator zusammenzufassen und diesen als Modifikation zu betrachten (bspw. das Vertauschen zweier Steine).
+
+\subsection{Simulated Annealing}
+
+Ebenfalls HC, wobei man mit einer bestimmten Wahrscheinlichkeit $p$ (proportional zu einer globalen Größe $T$) ein Schritt in eine Richtung unternommen wird, der \textit{keine Minimierung der geschätzten Distanz} $h$ bewirkt. Diese Wahrscheinlichkeit wird mit jeder Iteration langsam reduziert.
+
+$\Rightarrow$ lokale Maxima können wieder verlassen werden (ein hohes initiales $T$ vorausgesetzt)
+
+\section{A-Algorithmus}
+
+$\dots$ die Antwort drauf, dass sowohl HC als auch BS nicht immer \text{eine beste Lösung} finden
+
+\begin{center}
+    \begin{tabular}{c c c}
+        \huge Güte einer Lösung & \huge $\thicksim $ & \huge Tiefe im Suchraum \\
+        & & (je kleiner, desto besser)        
+    \end{tabular}
+\end{center}
+
+HC und BS sind gierige Suchverfahren und finden bei einer (einmalig oder partiell) ungenauen Heuristik keine optimale Lösung. Bei einer perfekten Heuristik finden sie die optimale (aber BL- und ML-Aufwand müssen im Verhältnis stehen). 
+
+Expandiere den Knoten $n$ zuerst, der \textit{schätzungsgemäß am nächsten} $(h)$ an einem hochliegenden $(d)$ Ziel liegt, d.h. den mit \textit{minimalem} $f(n) := d(n) + h(n)$.
+
+Im Allgemeinen setzt man statt $d$ die Schätzung $g(n)$ der tatsächlichen Kosten $g^*(n)$, die man benötigt, um $n$ zu erreichen.
+
+\pagebreak
+
+\subsection{Der Algorithmus}
+
+\begin{enumerate}
+    \item Sei $L$ die Liste der Startknoten für das Problem.
+    \item Ist $L$ leer, so melde einen Fehlschlag. \\ Andernfalls wähle denjenigen Knoten $n$ aus $L$, für den \\
+    \[ f(n) = g(n) + h(n) \]
+    \textit{minimal} ist.
+    \item Stellt $n$ einen Zielknoten dar, so melde Erfolg und liefere den Pfad vom Startknoten zu $n$.
+    \item Andernfalls entferne $n$ aus $L$ und füge alle seine Nachfolgeknoten in die Liste $L$ ein. Markiere dabei die neuen Knoten mit dem jeweils zugehörigen Pfad vom Startknoten.
+    \item Weiter mit Schritt $2$!
+\end{enumerate}
+
+Im Prinzip Best-First Suche mit $f$ statt $h$.
+
+\subsection{Der $A^*$-Algorithmus}
+
+$h$ ist \textit{optimistisch} (zulässig), falls: \qquad $\forall n: h(n) \leq h^*(n)$\\
+(falls also nicht überschätzt wird)
+
+\large Der $A$-Algorithmus wird für zulässiges $h$ zum $A^*$-Algorithmus!
+
+\subsubsection{Eigenschaften des $A^*$-Algorithmus}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=8cm]{a_stern_argument_grafik.jpg}
+    \end{center}
+    \caption{$A^*$-Algorithmus findet immer das Optimum}    
+\end{figure}
+
+Je tiefer der Pfad, desto größer wird $f(n) = g(n) + h(n)$, da $g(n)$ überschätzt und $h(n)$ unterschätzt. Also sind die geschätzten Kosten am Anfang immer geringer als die tatsächlichen Kosten am Ende des Pfades. Somit kann ein gefundener Zielpfad nur der Beste sein, denn gäbe es einen noch besseren Pfad, so wäre dessen Schätzung $h$ noch besser gewesen und wir hätten an irgendeinem Punkt in diese Richtung exploriert und somit den suboptimalen Zielpfad nie gefunden.
+
+% TODO Heuristische Suche ergänzen
+
+\pagebreak
 
 \section{Prüfungsfragen}
 \begin{enumerate}
