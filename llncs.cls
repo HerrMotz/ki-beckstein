@@ -181,7 +181,7 @@
  \def\noteaddname{Nachtrag}%
  \def\notename{Anmerkung}%
  \def\partname{Teil}%
-%\def\problemname{Problem}%
+ \def\problemname{Problem}%
  \def\proofname{Beweis}%
  \def\propertyname{Eigenschaft}%
 %\def\propositionname{Proposition}%
