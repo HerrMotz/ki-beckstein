@@ -1222,9 +1222,11 @@ Alternative zu Default-Logiken, die Normalitätsannahmen verwendet.
     \item Also sind Dinge nicht generell abnormal, sondern in Bezug auf ein bestimmtest Prädikat (\textit{Beispiel}: Vogel, Fliegen, etc.)
 \end{itemize}
 
-\textbf{Problem der temporalen Projektion:} Welche Eigenschaften gelten, nachdem bestimmte Ereignisse stattgefunden haben? Vor allem solche, die nicht syntaktische oder logische Konsequenz sind?
+\begin{problem}[Problem der temporalen Projektion] Welche Eigenschaften gelten, nachdem bestimmte Ereignisse stattgefunden haben? Vor allem solche, die nicht syntaktische oder logische Konsequenz sind?
+\end{problem}
 
-\textbf{Das Frame-Problem:} riesige Anzahl an Axiomen wäre nötig. Aber: McCarthy's Formulierung besagt, dass alle "normalen" Fakten nach "normalen" Ereignissen gelten. So muss das "abnormal"-Prädikat nicht so oft verwendet werden. % TODO wer ist McCarthy??
+\begin{problem}[Das Frame-Problem] riesige Anzahl an Axiomen wäre nötig. Aber: McCarthy's Formulierung besagt, dass alle "normalen" Fakten nach "normalen" Ereignissen gelten. So muss das "abnormal"-Prädikat nicht so oft verwendet werden. % TODO wer ist McCarthy??
+\end{problem}
 
 \subsection{Poole-Erweiterungen}
 
@@ -1242,11 +1244,9 @@ Im Zweifel entscheidet man sich bei widersprüchlichen leichtgläubigen Konseque
 
 \subsection{Skeptische und leichtgläubige Konsequenzten}
 
-Wie berechnet man, ob eine Anfrage $q$ leichtgläubige bzw. skeptische Konsequenz von $(T,A)$ ist?
+Wie berechnet man, ob eine Anfrage $q$ leichtgläubige bzw. skeptische Konsequenz von $(T,A)$ ist? $\rightarrow$ Das Überprüfen aller Poole-Erweiterungen ist teuer und unnötig.
 
-\par $\rightarrow$ Das Überprüfen aller Poole-Erweiterungen ist viel zu teuer und unnötig.
-
-\textit{Lösung:} $S$ ist eine Erklärung für $q$ relativ zu $(T,A)$, wenn gilt:
+\begin{solution}$S$ ist eine Erklärung für $q$ relativ zu $(T,A)$, wenn gilt:
 
 \begin{enumerate}
     \item $S$ ist Teilmenge von $A$.
@@ -1256,6 +1256,8 @@ Wie berechnet man, ob eine Anfrage $q$ leichtgläubige bzw. skeptische Konsequen
 \end{enumerate}
 
 Es gibt (vergleichsweise) effiziente Algorithmus zur Berechnung von Erklärungen.
+
+\end{solution}
 
 \begin{example} Nixon-Diamant\\
     "Nixon ist Pazifist"
