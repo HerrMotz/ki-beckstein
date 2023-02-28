@@ -191,7 +191,7 @@
  \def\solutionname{L\"osung}%
  \def\subclassname{{\it Subject Classifications\/}:}%
  \def\tablename{Tabelle}%
-%\def\theoremname{Theorem}%
+ \def\theoremname{Satz}%
 }
 
 % Ragged bottom for the actual page
