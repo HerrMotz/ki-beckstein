@@ -851,7 +851,8 @@ Im Prinzip Best-First Suche mit $f$ statt $h$.
 $h$ ist \textit{optimistisch} (zulässig), falls: \qquad $\forall n: h(n) \leq h^*(n)$\\
 (falls also nicht überschätzt wird)
 
-\large Der $A$-Algorithmus wird für zulässiges $h$ zum $A^*$-Algorithmus!
+\large Der $A$-Algorithmus wird für zulässiges $h$ zum $A^*$-Algorithmus! 
+\normalsize
 
 \subsubsection{Eigenschaften des $A^*$-Algorithmus}
 
@@ -1260,8 +1261,45 @@ Es gibt (vergleichsweise) effiziente Algorithmus zur Berechnung von Erklärungen
 \end{solution}
 
 \begin{example} Nixon-Diamant\\
-    "Nixon ist Pazifist"
+    "Nixon ist Pazifist" ist leichtgläubige, aber keine skeptische Konsequenz, da dies durch eine, aber eben nicht alle Poole-Erweiterungen geschlossen werden kann.
 \end{example}
+
+\subsection{Frames und Semantische Netze}
+
+Wir reduzieren sehr komplizierte Probleme auf das Problem der Wissensrepräsentation und Wissensverarbeitung.
+
+Man benötige $n$ Wissenseinheiten und $T(n)$ Zeiteinheiten für die Verrarbeitung. Dann sollte unser Inferenzmotor bei $c \times n$ Wissenseinheiten nicht deutlich mehr Zeit beanspruchen, insbesondere nicht $c$ Mal so viel oder exponentiell.
+
+\[ T(n) \leq T(c \times n) \leq c \times T(n) \]
+
+Insbesondere wollen wir \textit{nicht} haben, dass:
+
+\[ T(c \times n) = T(n)^c \]
+
+\begin{example}Blocksworld \\
+    klassische Logik ziemlich teuer (exponentiell)
+\end{example}
+
+\subsection{Wissensrepräsentation also Kompromiss}
+
+Berechnungsanforderungen können reduziert werden durch:
+
+\begin{enumerate}
+    \item Spezialsprachen: beschränkte Ausdruckskraft, bspw. Semantische Netzwerke oder Frames
+    \item Beschränktes Schlussfolgern: Form der Implikation, schwächer als volle logische Konsequenz (bspw. "Welten-Theorie")
+    \item Defaults: unvollständige Wissensbasis wird durch Annahmen ergänzt $\rightarrow$ nicht-monotones Schließen
+\end{enumerate}
+
+\subsection{Objektzentrierte Repräsentationen}
+(Alternative wäre Zentrierung auf Aktionen zwischen Objekten)
+
+Darstellung der WB als beschrifteter, gerichteter Graph:
+\begin{itemize}
+    \item unäre Prädikate: Typen, Konstanten $\rightarrow$ Knoten im Graph
+    \item binäre Prädikate: Attribute ("is a") $\rightarrow$ Kanten im Graph
+\end{itemize}
+
+$\rightarrow$ Inferenzen können als Suchalgorithmen implementiert werden!
 
 
 % TODO Heuristische Suche ergänzen
