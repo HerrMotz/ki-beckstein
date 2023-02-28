@@ -1301,8 +1301,55 @@ Darstellung der WB als beschrifteter, gerichteter Graph:
 
 $\rightarrow$ Inferenzen können als Suchalgorithmen implementiert werden!
 
+\subsection{Reifikation}
 
-% TODO Heuristische Suche ergänzen
+bird, tiger, whale etc. nicht als Prädikate (also $\textit{whale}(x)$), sondern als Individuen auffassen! Vereinbarungen:
+
+\begin{enumerate}
+    \item $\textit{subclass}(x, y)$: $x$ ist Teilklasse von $y$
+    \item $\textit{instance}(a, x)$: Objekt $a$ gehört zu Klasse $x$
+    \item $\textit{value}(a, p, v)$: die Eigenschaft $p$ von Objekt $a$ hat die Ausprägung $v$
+    \item $\textit{certain}(x, p, v)$: für jede Instanz $a$ von $x$ gilt $\text{value}(a, p, v)$ ("certain" $\estimates$ "sicher")
+    \item $\textit{default}(x, p, v)$: für Instanzen $a$ von $x$ gilt typischerweise $\textit{value}(a, p, v)$
+\end{enumerate}
+
+$\rightarrow$ entsprechende mengenlogische Beziehungen gelten. Anwendung siehe Vogeltheorie.
+
+Diese veränderte Darstellung ist nicht unbedingt kompakter, dafür aber änderungsfreundlich.
+
+\subsection{Frames}
+
+Eine spezielle Darstellung reifizierter Theorien
+
+Ein Frame-System besteht aus einer Menge von Objekten (z.B. birds, ostriches, Tweety, etc.) Jedes Objekt umfasst eine Menge von Attribut- und Wert-Paaren (z.B. $(\textit{covering}, \textit{feather})$ oder $(\textit{instance-of}, \textit{birds})$). Die Werte werden meist durch Facetten, welche die Werte bestimmen, näher beschrieben (z.B. Defaults oder Vererbungseigenschaften).
+
+Das Frame-System kann einfach in PL1 übersetzt werden:
+
+\begin{enumerate}
+    \item instance-of: $C$ in $O$ $\rightarrow$ $\textit{instance}(O, C)$. $O \estimates$ Objekt, $C \estimates$ Klasse.
+    \item $P: V$ (default) in $O$ $\rightarrow \textit{default}(O, P, V)$. $P \estimates$ Attribut, $V \estimates$ Wert für $P$.
+\end{enumerate}
+
+\subsection{Semantische Netze}
+
+graphische Repräsentation von Frame-Systemen
+
+\textbf{Übersetzung eines Frame-Systems $F$ in ein semantisches Netz:}
+\begin{itemize}
+    \item Jedes Objekt $O$ entspricht einem Knoten im Netz
+    \item Jedes Attribut $P$: $V$ in $O$ entspricht einer Kante von $O$ nach $V$ mit Beschriftung $P$.
+\end{itemize}
+
+So sind alle Informationen über ein konkretes Objekt direkt bei diesem gespeichert.
+
+Ein Frame repräsentiert aber eben nur die Eigenschaften \textit{eines} Objekts. Beziehungen zwischen Objekten sind schwierig. Versuche zur Erweiterung:
+
+\begin{enumerate}
+    \item Wechselseitige Speicherung: die jeweils inverse Relation wird benötigt (z.B. Moby größer Hobbs / Hobbs kleiner Moby) \\
+          $\rightarrow$ schwer zu warten: wenn sich etwas ändert, müssen beide Slots angepasst werden
+    \item Relation Objects: Beziehungen sind ebenfalls Objekte (Klassen), deren Instanzen Elemente der entsprechenden Relation sind \\
+          $\rightarrow$ $\textit{Hobbes-and-Moby} \rightarrow \textit{instance-of}: \textit{smaller}, \textit{smaller}: Hobbes, \textit{bigger}: Moby$
+\end{enumerate}
 
 \pagebreak
 
