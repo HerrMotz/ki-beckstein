@@ -1351,6 +1351,24 @@ Ein Frame repräsentiert aber eben nur die Eigenschaften \textit{eines} Objekts.
           $\rightarrow$ $\textit{Hobbes-and-Moby} \rightarrow \textit{instance-of}: \textit{smaller}, \textit{smaller}: Hobbes, \textit{bigger}: Moby$
 \end{enumerate}
 
+\subsection{Schließen mit und ohne Defaults}
+
+Werden Defaults verwendet wird eine Anfrage im Zweifelsfall durch die spezifischste Information beantwortet.
+
+\begin{itemize}
+    \item $\textit{value}(\textit{Fred}, \textit{locomotion}, v)$ wird mit $v = \textit{walk}$ beantwortet, nicht mit \textit{fly}. \\
+    Durch eine Übersetzung in PL1 wird die Anfrage allerdings wieder uneindeutig, da sowohl \textit{fly}, als auch \textit{walk} ableitbar ist.
+    \item Deswegen führt man ein Eindeutigkeitsaxiom ein: $\textit{value}(o, p, v) \land v \neq v' \rightarrow \lnot \textit{value}(o, p, v')$
+    \begin{itemize}
+        \item Verschiedenheit zweier Objekte durch das \textit{different}-Prädikat: $\textit{different}(\textit{walk}, \textit{fly})$
+        \item Zusammen ergibt das: $\textit{value}(o, p, v) \land \textit{different}(v, v') \rightarrow \lnot \textit{value}(o, p, v')$.
+    \end{itemize}
+\end{itemize}
+
+So hat die Übersetzung aber immer noch zwei Erweiterungen, die gleichwertig sind. Um das zu umgehen, können wir $\textit{subclass}(\textit{ostriches}, \textit{birds})$ mit der Regel: $\textit{subclass}(c1, c2) \land \textit{ab}(a, c1, p) \rightarrow \textit{ab}(a, c2, p)$ einführen. So wird eine Erweiterung der anderen vorgezogen.
+
+\textbf{Ziel:} Präzise Repräsentation des Wissens in einer (formalen) Sprahce, die zur maschinellen Verarbeitung geeignet ist.
+
 \pagebreak
 
 \section{Prüfungsfragen}
